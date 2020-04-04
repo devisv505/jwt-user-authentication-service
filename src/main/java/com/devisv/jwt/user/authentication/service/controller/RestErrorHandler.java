@@ -1,6 +1,8 @@
 package com.devisv.jwt.user.authentication.service.controller;
 
-import com.devisv.jwt.user.authentication.service.exception.HttpException;
+import com.devisv.web.exceptions.HttpException;
+import com.devisv.web.exceptions.InternalSeverErrorException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +15,7 @@ public class RestErrorHandler {
   @ExceptionHandler(HttpException.class)
   @ResponseBody
   public ResponseEntity<HttpException> processValidationError(HttpException exception) {
-    ResponseEntity response = new ResponseEntity(exception, exception.getHttpStatus());
+    ResponseEntity response = new ResponseEntity(exception, HttpStatus.valueOf(exception.getStatus()));
     return response;
   }
 
@@ -21,7 +23,8 @@ public class RestErrorHandler {
   @ResponseBody
   public ResponseEntity<HttpException> processValidationError(RuntimeException exception) {
     return new ResponseEntity(
-        new HttpException(INTERNAL_SERVER_ERROR, exception.getMessage(), exception), INTERNAL_SERVER_ERROR
+        new InternalSeverErrorException(exception.getMessage(), exception),
+        INTERNAL_SERVER_ERROR
     );
   }
 

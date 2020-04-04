@@ -1,95 +1,38 @@
 package com.devisv.jwt.user.authentication.service.model;
 
-import java.time.LocalDateTime;
+import com.devisv.jwt.user.authentication.service.core.AbstractEntity;
+import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends AbstractEntity<UserId> {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Column(name = "email")
+  private String email;
 
-  @Column(name = "user_login")
-  private String userLogin;
+  @Column(name = "password")
+  private String password;
 
-  @Column(name = "user_pass")
-  private String userPass;
+  @ElementCollection(fetch = FetchType.EAGER)
+  @Enumerated(EnumType.STRING)
+  @NotNull
+  private Set<UserRole> roles;
 
-  @Column(name = "creation_at")
-  private LocalDateTime creationAt;
-
-  @Column(name = "removal_at")
-  private LocalDateTime removalAt;
-
-  @Column(name = "last_login_at")
-  private LocalDateTime lastLoginAt;
-
-  @Column(name = "active")
-  private boolean active;
-
-  public User() {
+  protected User() {
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getUserLogin() {
-    return userLogin;
-  }
-
-  public void setUserLogin(String userLogin) {
-    this.userLogin = userLogin;
-  }
-
-  public String getUserPass() {
-    return userPass;
-  }
-
-  public void setUserPass(String userPass) {
-    this.userPass = userPass;
-  }
-
-  public LocalDateTime getCreationAt() {
-    return creationAt;
-  }
-
-  public void setCreationAt(LocalDateTime creationAt) {
-    this.creationAt = creationAt;
-  }
-
-  public LocalDateTime getRemovalAt() {
-    return removalAt;
-  }
-
-  public void setRemovalAt(LocalDateTime removalAt) {
-    this.removalAt = removalAt;
-  }
-
-  public LocalDateTime getLastLoginAt() {
-    return lastLoginAt;
-  }
-
-  public void setLastLoginAt(LocalDateTime lastLoginAt) {
-    this.lastLoginAt = lastLoginAt;
-  }
-
-  public boolean isActive() {
-    return active;
-  }
-
-  public void setActive(boolean active) {
-    this.active = active;
+  public User(UserId id, String email, String password, Set<UserRole> roles) {
+    super(id);
+    this.email = email;
+    this.password = password;
+    this.roles = roles;
   }
 }

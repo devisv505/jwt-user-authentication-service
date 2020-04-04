@@ -1,5 +1,7 @@
 package com.devisv.jwt.user.authentication.service.exception;
 
+import com.devisv.web.exceptions.NotFoundException;
+
 public class UserNotFound extends NotFoundException {
 
   private Long id;
